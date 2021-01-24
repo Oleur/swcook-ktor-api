@@ -5,7 +5,8 @@ This sample project offers a simple REST API where you can get or create recipes
 If you want to know more about Ktor, check the official documentation: https://ktor.io/docs/welcome.html
 
 ## Libraries and tech specs
-To demonstrate the great capabilities of Ktor and its reliability, many Ktor features and 3rd party libraries have been used:
+To demonstrate the great capabilities of Ktor and its reliability, many Ktor features and 3rd party libraries have been used.
+
 Ktor features:
 - **Location**: Handles routes in a typed way.
 - **StatusPage**: Properly handle errors and exception in your application.
