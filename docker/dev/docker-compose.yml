@@ -1,0 +1,34 @@
+
+
+version: "3.7" # For development purpose only
+services:
+  postgres:
+    image: postgres:12-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: postgres-test
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:4.25
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: oleur.utbm@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8088:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    links:
+      - "postgres:pgsql-server"
+
+volumes:
+  postgres-data:
+  pgadmin-data:

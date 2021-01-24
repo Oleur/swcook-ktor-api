@@ -1,0 +1,482 @@
+swagger: '2.0'
+info:
+  title: SWCook API
+  description: Sample application that showcases Ktor.
+  version: 0.0.1
+  contact:
+    email: oleur.utbm@gmail.com
+# ---------------------------
+# TAGS
+# ---------------------------
+tags:
+  - name: recipes
+  - name: ingredients
+  - name: steps
+
+# ---------------------------
+# SCHEMES
+# ---------------------------
+schemes:
+  - https
+
+# ---------------------------
+# PATHS
+# ---------------------------
+paths:
+  /recipes:
+    get:
+      tags:
+        - recipes
+      summary: Get a paginated list of recipes
+      operationId: "getRecipes"
+      parameters:
+        - name: page
+          in: query
+          description: The requested page. First page is 1, not 0.
+          required: true
+          type: integer
+        - name: count
+          in: query
+          type: integer
+          description: The count of elements per page
+      responses:
+        '200':
+          description: Available recipes
+          schema:
+            $ref: '#/definitions/GetRecipesResponse'
+    post:
+      tags:
+        - recipes
+      summary: "Add a new recipe"
+      operationId: "addRecipe"
+      parameters:
+        - name: recipe
+          in: "body"
+          description: "Recipe default information"
+          required: true
+          schema:
+            $ref: "#/definitions/PostRecipeRequest"
+      responses:
+        '201':
+          description: Returns recipe details
+          schema:
+            $ref: '#/definitions/PostRecipeResponse'
+  /recipes/{recipe_id}:
+    get:
+      tags:
+        - recipes
+      summary: Get recipe details
+      operationId: "getRecipe"
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: All recipes details
+          schema:
+            $ref: '#/definitions/Recipe'
+    patch:
+      tags:
+        - recipes
+      operationId: "editRecipe"
+      summary: "Edit a recipe"
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          type: string
+          format: uuid
+        - name: recipe
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/PatchRecipeRequestParameter'
+      responses:
+        '204':
+          description: Recipe was successfully updated
+    delete:
+      tags:
+        - recipes
+      operationId: "deleteRecipe"
+      summary: "Delete recipe"
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Recipe was successfully deleted
+  /recipes/{recipe_id}/ingredients:
+    parameters:
+      - name: recipe_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+    get:
+      tags:
+        - ingredients
+      summary: Get the list of ingredients for a given recipe
+      operationId: "getIngredients"
+      parameters:
+        - name: page
+          in: query
+          description: The requested page. First page is 1, not 0.
+          required: true
+          type: integer
+        - name: count
+          in: query
+          type: integer
+          description: The count of elements per page
+      responses:
+        '200':
+          description: List of ingredients for a given recipe
+          schema:
+            $ref: '#/definitions/GetIngredientsResponse'
+    post:
+      tags:
+        - ingredients
+      summary: Add new ingredients to a recipe
+      operationId: "addIngredient"
+      parameters:
+        - name: ingredient
+          in: "body"
+          description: "Ingredient information"
+          required: true
+          schema:
+            $ref: "#/definitions/AddIngredientToRecipeRequest"
+      responses:
+        '201':
+          description: Returns ingredient details
+          schema:
+            $ref: '#/definitions/PostIngredientResponse'
+  /recipes/{recipe_id}/ingredients/{ingredient_id}:
+    parameters:
+      - name: recipe_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+      - name: ingredient_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+    delete:
+      tags:
+        - ingredients
+      operationId: "deleteRecipe"
+      summary: "Remove ingredient from a recipe"
+      parameters:
+        - name: recipe_id
+          in: path
+          required: true
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: Ingredient was successfully removed
+  /recipes/{recipe_id}/steps:
+    parameters:
+      - name: recipe_id
+        in: path
+        required: true
+        type: string
+        format: uuid
+    get:
+      tags:
+        - steps
+      summary: Get the list of cooking steps for a given recipe
+      operationId: "getSteps"
+      parameters:
+        - name: page
+          in: query
+          description: The requested page. First page is 1, not 0.
+          required: true
+          type: integer
+        - name: count
+          in: query
+          type: integer
+          description: The count of elements per page
+      responses:
+        '200':
+          description: List of cooking steps for a given recipe
+          schema:
+            $ref: '#/definitions/GetStepsResponse'
+    post:
+      tags:
+        - steps
+      summary: Add new step to a recipe
+      operationId: "addSteps"
+      parameters:
+        - name: step
+          in: "body"
+          description: "Step information"
+          required: true
+          schema:
+            $ref: "#/definitions/PostStepRequest"
+      responses:
+        '201':
+          description: Returns step details
+          schema:
+            $ref: '#/definitions/PostStepResponse'
+
+  /ingredients:
+    get:
+      tags:
+        - ingredients
+      summary: Get a paginated list of ingredients
+      operationId: "getIngredients"
+      parameters:
+        - name: page
+          in: query
+          description: The requested page. First page is 1, not 0.
+          required: true
+          type: integer
+        - name: count
+          in: query
+          type: integer
+          description: The count of elements per page
+      responses:
+        '200':
+          description: Available ingredients
+          schema:
+            $ref: '#/definitions/GetIngredientsResponse'
+    post:
+      tags:
+        - recipes
+      summary: "Add a new ingredient"
+      operationId: "addIngredient"
+      parameters:
+        - name: recipe
+          in: "body"
+          description: "Ingredient details"
+          required: true
+          schema:
+            $ref: "#/definitions/PostIngredientRequest"
+      responses:
+        '201':
+          description: Returns ingredient details
+          schema:
+            $ref: '#/definitions/PostIngredientResponse'
+
+
+# ---------------------------
+# MODELS
+# ---------------------------
+definitions:
+  Recipe:
+    type: object
+    required:
+      - id
+      - title
+      - description
+      - cooking_time
+    properties:
+      id:
+        type: string
+        format: uuid
+      title:
+        type: string
+      description:
+        type: string
+      cooking_time:
+        type: integer
+        format: int32
+      date_published:
+        type: string
+        format: date-time
+      steps:
+        type: array
+        items:
+          $ref: '#/definitions/Step'
+      ingredients:
+        type: array
+        items:
+          $ref: '#/definitions/Ingredient'
+  GetRecipesResponse:
+    type: object
+    required:
+      - recipes
+    properties:
+      recipes:
+        type: array
+        items:
+          $ref: '#/definitions/Recipe'
+      next_page:
+        type: integer
+        format: int32
+      previous_page:
+        type: integer
+        format: int32
+      total:
+        type: integer
+        format: int64
+  GetIngredientsResponse:
+    type: object
+    required:
+      - ingredients
+    properties:
+      ingredients:
+        type: array
+        items:
+          $ref: '#/definitions/Ingredient'
+      next_page:
+        type: integer
+        format: int32
+      previous_page:
+        type: integer
+        format: int32
+      total:
+        type: integer
+        format: int64
+  GetStepsResponse:
+    type: object
+    required:
+      - steps
+    properties:
+      steps:
+        type: array
+        items:
+          $ref: '#/definitions/Step'
+      next_page:
+        type: integer
+        format: int32
+      previous_page:
+        type: integer
+        format: int32
+      total:
+        type: integer
+        format: int64
+  GetIngredientResponse:
+    type: object
+    required:
+      - ingredient
+    properties:
+      ingredient:
+        $ref: '#/definitions/Ingredient'
+  PatchRecipeRequestParameter:
+    type: object
+    required:
+      - title
+    properties:
+      title:
+        type: string
+  PostRecipeRequest:
+    type: object
+    required:
+      - recipe
+    properties:
+      recipe:
+        type: object
+        required:
+          - title
+          - description
+          - cooking_time
+        properties:
+          title:
+            type: string
+            format: string
+          description:
+            type: string
+          cooking_time:
+            type: integer
+            format: int32
+  PostRecipeResponse:
+    type: object
+    required:
+      - recipe
+    properties:
+      recipe:
+        $ref: '#/definitions/Recipe'
+  PostStepRequest:
+    type: object
+    required:
+      - position
+      - description
+      - prep_time
+    properties:
+      position:
+        type: integer
+        format: int32
+      description:
+        type: string
+      prep_time:
+        type: integer
+        format: int32
+  PostStepResponse:
+    type: object
+    required:
+      - step
+    properties:
+      step:
+        $ref: '#/definitions/Step'
+  PostIngredientRequest:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      type:
+        type: string
+  Ingredient:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      description:
+        type: string
+      type:
+        type: string
+      recipe_id:
+        type: string
+        format: uuid
+  Step:
+    type: object
+    required:
+      - id
+      - position
+      - description
+      - prep_time
+    properties:
+      id:
+        type: string
+        format: uuid
+      position:
+        type: integer
+        format: int32
+      description:
+        type: string
+      prep_time:
+        type: integer
+        format: int32
+  AddIngredientToRecipeRequest:
+    type: object
+    required:
+      - ingredients
+    properties:
+      ingredients:
+        type: array
+        items:
+          type: string
+          format: uuid
+          x-nullable: true
+
+consumes:
+  - application/json
+produces:
+  - application/json
