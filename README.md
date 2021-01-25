@@ -1,6 +1,7 @@
 # swcook-ktor-api
 Sample cooking API made with Kotlin Ktor to showcase the library capabilities.
 This sample project offers a simple REST API where you can get or create recipes with a list of ingredients and cooking steps.
+This sample is using MVC and Clean Architecture concepts in order to have a clean seperation of the layers. And thanks to Swagger, we can share code between the backend application and mobile apps.
 
 If you want to know more about Ktor, check the official documentation: https://ktor.io/docs/welcome.html
 
