@@ -7,11 +7,9 @@ import com.example.swcook.data.mapper.toEntity
 import com.example.swcook.data.model.Ingredient
 import com.example.swcook.data.model.IngredientTable
 import com.example.swcook.data.model.Recipe
-import com.example.swcook.data.model.RecipeTable
 import com.example.swcook.domain.entity.IngredientEntity
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
 class IngredientRepository {

@@ -54,9 +54,8 @@ dependencies {
     implementation("org.koin:koin-logger-slf4j:$koin")
 
     // DB
-    implementation("org.postgresql:postgresql:42.2.16")
-    implementation("com.h2database:h2:1.4.200")
-    implementation("com.zaxxer:HikariCP:3.4.5")
+    implementation("org.postgresql:postgresql:42.2.20")
+    implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.flywaydb:flyway-core:6.5.5")
     implementation("org.jetbrains.exposed:exposed-core:$exposed")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed")
@@ -69,7 +68,7 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi")
 
     // Okio
-    implementation("com.squareup.okio:okio:2.8.0")
+    implementation("com.squareup.okio:okio:2.10.0")
 
     // Validation
     implementation("org.valiktor:valiktor-core:0.12.0")
@@ -89,7 +88,7 @@ dependencies {
 
 tasks {
     named<ShadowJar>("shadowJar") {
-        archiveFileName.set("swcook.jar")
+        archiveFileName.set("cookapi.jar")
         mergeServiceFiles()
         manifest {
             attributes(mapOf("Main-Class" to application.mainClassName))
