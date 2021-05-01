@@ -1,3 +1,5 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Oleur/swcook-ktor-api)
+
 # swcook-ktor-api
 Sample cooking API made with Kotlin Ktor to showcase the library capabilities.
 This sample project offers a simple REST API where you can get or create recipes with a list of ingredients and cooking steps.
