@@ -1,3 +1,9 @@
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Oleur/swcook-ktor-api)
+
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Oleur/swcook-ktor-api)
+
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/Oleur/swcook-ktor-api)
+
 # swcook-ktor-api
 Sample cooking API made with Kotlin Ktor to showcase the library capabilities.
 This sample project offers a simple REST API where you can get or create recipes with a list of ingredients and cooking steps.
@@ -35,3 +41,16 @@ External libraries:
 I built this web service for a talk I gave at FOSDEM 2021. Here are the slides and the video of the conference:
 - Slides (_coming soon_)
 - Video (_coming soon_)
+
+
+https://www.gitpod.io/docs/languages/kotlin
+https://www.gitpod.io/docs/config-docker
+
+1. 
+Reference a Dockerfile next to your .gitpod.yml file:
+image:
+  file: .gitpod.Dockerfile
+
+2. no arquivo gitpod.Dockerfile
+USER gitpod
+RUN brew install kotlin
