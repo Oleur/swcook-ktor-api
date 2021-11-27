@@ -10,10 +10,8 @@ import com.example.swcook.domain.service.RecipeService
 import com.example.swcook.domain.service.StepService
 import com.typesafe.config.ConfigFactory
 import io.ktor.config.*
-import io.ktor.util.*
 import org.koin.dsl.module
 
-@KtorExperimentalAPI
 val dataModule = module {
     single { AppDatabase(get()) }
 
@@ -23,22 +21,18 @@ val dataModule = module {
     single { RecipeIngredientRepository() }
 }
 
-@KtorExperimentalAPI
 val domainModule = module {
     single { RecipeService(get()) }
     single { IngredientService(get(), get()) }
     single { StepService(get()) }
 }
 
-@KtorExperimentalAPI
 val coreModule = module {
     single { provideKtorConfig() }
 }
 
-@KtorExperimentalAPI
 private fun provideKtorConfig(): ApplicationConfig {
     return HoconApplicationConfig(ConfigFactory.load())
 }
 
-@KtorExperimentalAPI
 val appModules = listOf(dataModule, domainModule, coreModule)

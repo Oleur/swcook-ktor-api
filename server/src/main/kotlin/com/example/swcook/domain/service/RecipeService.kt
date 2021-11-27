@@ -11,7 +11,7 @@ class RecipeService(private val recipeRepository: RecipeRepository) {
 
     suspend fun get(uid: UUID) = recipeRepository.get(uid)
 
-    suspend fun add(recipe: RecipeEntity): RecipeEntity? {
+    suspend fun add(recipe: RecipeEntity): RecipeEntity {
         // TODO check to avoid adding recipes multiple times
         return recipeRepository.insert(recipe)
     }

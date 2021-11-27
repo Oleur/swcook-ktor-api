@@ -25,9 +25,16 @@ class MoshiConverter(private val moshi: Moshi = Moshi.Builder().build()) : Conte
         }.getOrNull()
     }
 
-    override suspend fun convertForSend(context: PipelineContext<Any, ApplicationCall>, contentType: ContentType, value: Any): Any? {
+    override suspend fun convertForSend(
+        context: PipelineContext<Any, ApplicationCall>,
+        contentType: ContentType,
+        value: Any
+    ): Any? {
         return kotlin.runCatching {
-            TextContent(moshi.adapter(value.javaClass).toJson(value), contentType.withCharset(context.call.suitableCharset()))
+            TextContent(
+                moshi.adapter(value.javaClass).toJson(value),
+                contentType.withCharset(context.call.suitableCharset())
+            )
         }.getOrNull()
     }
 }
