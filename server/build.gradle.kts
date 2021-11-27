@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 // Delegated extra properties referenced in gradle.properties
 val kotlin: String by extra
@@ -54,9 +55,9 @@ dependencies {
     implementation("org.koin:koin-logger-slf4j:$koin")
 
     // DB
-    implementation("org.postgresql:postgresql:42.2.20")
-    implementation("com.zaxxer:HikariCP:4.0.3")
-    implementation("org.flywaydb:flyway-core:6.5.5")
+    implementation("org.postgresql:postgresql:42.3.1")
+    implementation("com.zaxxer:HikariCP:5.0.0")
+    implementation("org.flywaydb:flyway-core:8.0.2")
     implementation("org.jetbrains.exposed:exposed-core:$exposed")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed")
@@ -68,7 +69,7 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi")
 
     // Okio
-    implementation("com.squareup.okio:okio:2.10.0")
+    implementation("com.squareup.okio:okio:3.0.0")
 
     // Validation
     implementation("org.valiktor:valiktor-core:0.12.0")
@@ -77,9 +78,9 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktor")
     testImplementation("org.koin:koin-test:$koin")
 
-    testImplementation("io.mockk:mockk:1.10.0")
+    testImplementation("io.mockk:mockk:1.12.0")
 
-    testImplementation("org.amshove.kluent:kluent:1.61")
+    testImplementation("org.amshove.kluent:kluent:1.68")
 
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spek")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spek")
@@ -93,5 +94,11 @@ tasks {
         manifest {
             attributes(mapOf("Main-Class" to application.mainClassName))
         }
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }

@@ -7,14 +7,12 @@ import com.example.swcook.data.model.StepTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.*
-import io.ktor.util.*
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import javax.sql.DataSource
 
-@KtorExperimentalAPI
 class AppDatabase(private val config: ApplicationConfig) {
 
     lateinit var dataSource: DataSource

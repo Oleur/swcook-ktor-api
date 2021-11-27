@@ -15,7 +15,7 @@ class IngredientService(
 
     suspend fun get(uid: UUID) = ingredientRepository.get(uid)
 
-    suspend fun add(recipe: IngredientEntity): IngredientEntity? {
+    suspend fun add(recipe: IngredientEntity): IngredientEntity {
         // TODO check to avoid adding recipes multiple times
         return ingredientRepository.insert(recipe)
     }

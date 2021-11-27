@@ -25,6 +25,8 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.ktor.ext.inject
+import io.ktor.locations.post as locationsPost
+import io.ktor.locations.patch as locationsPatch
 
 @KtorExperimentalLocationsAPI
 fun Route.recipes() {
@@ -48,7 +50,7 @@ fun Route.recipes() {
         call.respond(HttpStatusCode.OK, response)
     }
 
-    post<Routes.Recipes> {
+    locationsPost<Routes.Recipes> {
         val request = withContext(Dispatchers.IO) {
             call.receive<PostRecipeRequest>()
         }
@@ -71,7 +73,7 @@ fun Route.recipes() {
         }
     }
 
-    patch<Routes.Recipes.ByUid> { request ->
+    locationsPatch<Routes.Recipes.ByUid> { request ->
         val payload = withContext(Dispatchers.IO) {
             call.receive<PatchRecipeRequestParameter>()
         }
@@ -94,7 +96,7 @@ fun Route.recipes() {
     }
 
     // Add Ingredients to recipe
-    post<Routes.Recipes.ByUid.Ingredients> { route ->
+    locationsPost<Routes.Recipes.ByUid.Ingredients> { route ->
         val request = withContext(Dispatchers.IO) {
             call.receive<AddIngredientToRecipeRequest>()
         }
@@ -108,8 +110,13 @@ fun Route.recipes() {
         }
     }
 
+
+    locationsPost<Routes.Recipes.ByUid.Steps> {
+
+    }
+
     // Add Ingredients to recipe
-    post<Routes.Recipes.ByUid.Steps> { route ->
+    locationsPost<Routes.Recipes.ByUid.Steps> { route ->
         val request = withContext(Dispatchers.IO) {
             call.receive<PostStepRequest>()
         }

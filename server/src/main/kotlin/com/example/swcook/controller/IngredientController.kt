@@ -19,6 +19,7 @@ import io.ktor.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.ktor.ext.inject
+import io.ktor.locations.post as locationsPost
 
 @KtorExperimentalLocationsAPI
 fun Route.ingredients() {
@@ -40,7 +41,7 @@ fun Route.ingredients() {
         call.respond(HttpStatusCode.OK, response)
     }
 
-    post<Routes.Ingredients> {
+    locationsPost<Routes.Ingredients> {
         val request = withContext(Dispatchers.IO) {
             call.receive<PostIngredientRequest>()
         }

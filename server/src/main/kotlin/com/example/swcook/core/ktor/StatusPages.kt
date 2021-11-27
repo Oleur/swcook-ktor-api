@@ -11,7 +11,8 @@ fun StatusPages.Configuration.exceptions() {
 
     exception<ConstraintViolationException> { exception ->
         // Basic ConstraintViolationException handler
-        val violations = exception.constraintViolations.map { violation -> "${violation.property}:${violation.constraint.name}" }
+        val violations =
+            exception.constraintViolations.map { violation -> "${violation.property}:${violation.constraint.name}" }
         call.respondText(status = HttpStatusCode.UnprocessableEntity) { violations.toString() }
     }
 
