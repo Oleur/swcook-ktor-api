@@ -1,6 +1,7 @@
 package com.example.swcook
 
-import io.ktor.locations.*
+import io.ktor.server.locations.KtorExperimentalLocationsAPI
+import io.ktor.server.locations.Location
 import java.util.*
 
 @KtorExperimentalLocationsAPI

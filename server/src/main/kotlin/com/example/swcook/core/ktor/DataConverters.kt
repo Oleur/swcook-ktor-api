@@ -1,14 +1,14 @@
 package com.example.swcook.core.ktor
 
-import io.ktor.features.*
-import io.ktor.util.*
+import io.ktor.util.converters.DataConversion
+import io.ktor.util.converters.DataConversionException
 import java.util.*
 
 fun DataConversion.Configuration.converters() {
 
     convert<UUID> {
-        decode { values, _ ->
-            values.singleOrNull()?.let { value -> UUID.fromString(value) }
+        decode { values ->
+            UUID.fromString(values.first())
         }
 
         encode { value ->

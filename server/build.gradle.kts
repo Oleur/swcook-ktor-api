@@ -45,19 +45,22 @@ dependencies {
 
     // Ktor
     implementation("io.ktor:ktor-server-netty:$ktor")
-    implementation("io.ktor:ktor-locations:$ktor")
+    implementation("io.ktor:ktor-server-locations:$ktor")
+    implementation("io.ktor:ktor-server-status-pages:$ktor")
+    implementation("io.ktor:ktor-server-data-conversion:$ktor")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor")
 
     // Logback
     implementation("ch.qos.logback:logback-classic:$logback")
 
     // Koin
-    implementation("org.koin:koin-ktor:$koin")
-    implementation("org.koin:koin-logger-slf4j:$koin")
+    implementation("io.insert-koin:koin-ktor:$koin")
+    implementation("io.insert-koin:koin-logger-slf4j:$koin")
 
     // DB
-    implementation("org.postgresql:postgresql:42.3.1")
-    implementation("com.zaxxer:HikariCP:5.0.0")
-    implementation("org.flywaydb:flyway-core:8.0.2")
+    implementation("org.postgresql:postgresql:42.3.4")
+    implementation("com.zaxxer:HikariCP:5.0.1")
+    implementation("org.flywaydb:flyway-core:8.5.10")
     implementation("org.jetbrains.exposed:exposed-core:$exposed")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed")
@@ -69,7 +72,7 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi")
 
     // Okio
-    implementation("com.squareup.okio:okio:3.0.0")
+    implementation("com.squareup.okio:okio:3.1.0")
 
     // Validation
     implementation("org.valiktor:valiktor-core:0.12.0")
@@ -78,7 +81,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktor")
     testImplementation("org.koin:koin-test:$koin")
 
-    testImplementation("io.mockk:mockk:1.12.0")
+    testImplementation("io.mockk:mockk:1.12.3")
 
     testImplementation("org.amshove.kluent:kluent:1.68")
 

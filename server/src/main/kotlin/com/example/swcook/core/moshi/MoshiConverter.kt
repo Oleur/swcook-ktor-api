@@ -1,50 +1,54 @@
 package com.example.swcook.core.moshi
 
 import com.squareup.moshi.Moshi
-import io.ktor.application.*
-import io.ktor.features.*
-import io.ktor.http.*
-import io.ktor.http.content.*
-import io.ktor.request.*
-import io.ktor.util.pipeline.*
-import io.ktor.utils.io.*
-import io.ktor.utils.io.jvm.javaio.*
+import io.ktor.http.ContentType
+import io.ktor.http.content.OutgoingContent
+import io.ktor.http.content.TextContent
+import io.ktor.http.withCharset
+import io.ktor.serialization.ContentConverter
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiationConfig
+import io.ktor.util.reflect.TypeInfo
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.charsets.Charset
+import io.ktor.utils.io.jvm.javaio.toInputStream
 import okio.buffer
 import okio.source
-import kotlin.reflect.jvm.jvmErasure
 
 // Source: https://github.com/rharter/ktor-moshi - reimplemented because used kotlinx.io which has been removed in ktor since 1.3.0
 class MoshiConverter(private val moshi: Moshi = Moshi.Builder().build()) : ContentConverter {
-    override suspend fun convertForReceive(context: PipelineContext<ApplicationReceiveRequest, ApplicationCall>): Any? {
-        val request = context.subject
-        val channel = request.value as? ByteReadChannel ?: return null
-        val source = channel.toInputStream().source().buffer()
-        val type = request.typeInfo.jvmErasure
+
+    override suspend fun deserialize(
+        charset: Charset,
+        typeInfo: TypeInfo,
+        content: ByteReadChannel
+    ): Any? {
+        val source = content.toInputStream().source().buffer()
         return kotlin.runCatching {
-            moshi.adapter(type.javaObjectType).fromJson(source)
+            moshi.adapter(typeInfo.type.javaObjectType).fromJson(source)
         }.getOrNull()
     }
 
-    override suspend fun convertForSend(
-        context: PipelineContext<Any, ApplicationCall>,
+    override suspend fun serialize(
         contentType: ContentType,
+        charset: Charset,
+        typeInfo: TypeInfo,
         value: Any
-    ): Any? {
+    ): OutgoingContent? {
         return kotlin.runCatching {
             TextContent(
                 moshi.adapter(value.javaClass).toJson(value),
-                contentType.withCharset(context.call.suitableCharset())
+                contentType.withCharset(charset)
             )
         }.getOrNull()
     }
 }
 
-fun ContentNegotiation.Configuration.moshi(moshi: Moshi = Moshi.Builder().build()) {
+fun ContentNegotiationConfig.moshi(moshi: Moshi = Moshi.Builder().build()) {
     val converter = MoshiConverter(moshi)
     register(ContentType.Application.Json, converter)
 }
 
-fun ContentNegotiation.Configuration.moshi(block: Moshi.Builder.() -> Unit) {
+fun ContentNegotiationConfig.moshi(block: Moshi.Builder.() -> Unit) {
     val builder = Moshi.Builder()
     builder.apply(block)
     val converter = MoshiConverter(builder.build())
