@@ -13,17 +13,21 @@ fun StatusPagesConfig.exceptions() {
     exception<ConstraintViolationException> { call, exception ->
         // Basic ConstraintViolationException handler
         val violations =
-            exception.constraintViolations.map { violation -> "${violation.property}:${violation.constraint.name}" }
+            exception.constraintViolations.map { violation ->
+                "${violation.property}:${violation.constraint.name}"
+            }
         call.respondText(status = HttpStatusCode.UnprocessableEntity) { violations.toString() }
     }
 
     exception<JsonDataException> { call, exception ->
         // Basic moshi JsonDataException handler
-        call.respondText(status = HttpStatusCode.BadRequest) { exception.message.toString() }
+        call.respondText(status = HttpStatusCode.BadRequest) {
+            exception.message ?: "Bad format"
+        }
     }
 
     exception<Throwable> { call, exception ->
-        call.application.log.error("Unhandled exception", exception)
+        call.application.log.error("Unhandled exception \uD83E\uDD15", exception)
         call.respond(HttpStatusCode.InternalServerError)
     }
 }

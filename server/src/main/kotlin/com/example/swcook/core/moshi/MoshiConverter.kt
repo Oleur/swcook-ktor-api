@@ -23,9 +23,7 @@ class MoshiConverter(private val moshi: Moshi = Moshi.Builder().build()) : Conte
         content: ByteReadChannel
     ): Any? {
         val source = content.toInputStream().source().buffer()
-        return kotlin.runCatching {
-            moshi.adapter(typeInfo.type.javaObjectType).fromJson(source)
-        }.getOrNull()
+        return moshi.adapter(typeInfo.type.javaObjectType).fromJson(source)
     }
 
     override suspend fun serialize(
@@ -33,13 +31,11 @@ class MoshiConverter(private val moshi: Moshi = Moshi.Builder().build()) : Conte
         charset: Charset,
         typeInfo: TypeInfo,
         value: Any
-    ): OutgoingContent? {
-        return kotlin.runCatching {
-            TextContent(
-                moshi.adapter(value.javaClass).toJson(value),
-                contentType.withCharset(charset)
-            )
-        }.getOrNull()
+    ): OutgoingContent {
+        return TextContent(
+            moshi.adapter(value.javaClass).toJson(value),
+            contentType.withCharset(charset)
+        )
     }
 }
 

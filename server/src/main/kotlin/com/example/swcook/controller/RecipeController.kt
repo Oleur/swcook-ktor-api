@@ -53,16 +53,17 @@ fun Route.recipes() {
     }
 
     locationsPost<Routes.Recipes> {
-        val request = withContext(Dispatchers.IO) {
-            call.receive<PostRecipeRequest>()
-        }
-        request.validate()
-        val created = recipeService.add(request.recipe.toEntity())
-        if (created != null) {
-            val response = PostRecipeResponse(recipe = created.renderer())
-            call.respond(HttpStatusCode.Created, response)
-        } else {
-            call.respond(HttpStatusCode.Conflict)
+        withContext(Dispatchers.IO) {
+            val payload = call.receive<PostRecipeRequest>()
+            payload.validate()
+
+            val created = recipeService.add(payload.recipe.toEntity())
+            if (created != null) {
+                val response = PostRecipeResponse(recipe = created.renderer())
+                call.respond(HttpStatusCode.Created, response)
+            } else {
+                call.respond(HttpStatusCode.Conflict)
+            }
         }
     }
 
@@ -76,16 +77,18 @@ fun Route.recipes() {
     }
 
     locationsPatch<Routes.Recipes.ByUid> { request ->
-        val payload = withContext(Dispatchers.IO) {
-            call.receive<PatchRecipeRequestParameter>()
+        withContext(Dispatchers.IO) {
+            val payload = call.receive<PatchRecipeRequestParameter>()
+            payload.validate()
+
+            val updated = recipeService.updateTitle(request.uid, payload.title)
+            if (updated) {
+                call.respond(HttpStatusCode.NoContent)
+            } else {
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
-        payload.validate()
-        val updated = recipeService.updateTitle(request.uid, payload.title)
-        if (updated) {
-            call.respond(HttpStatusCode.NoContent)
-        } else {
-            call.respond(HttpStatusCode.NotFound)
-        }
+
     }
 
     delete<Routes.Recipes.ByUid> { request ->
@@ -99,19 +102,21 @@ fun Route.recipes() {
 
     // Add Ingredients to recipe
     locationsPost<Routes.Recipes.ByUid.Ingredients> { route ->
-        val request = withContext(Dispatchers.IO) {
-            call.receive<AddIngredientToRecipeRequest>()
-        }
-        request.validate()
+        withContext(Dispatchers.IO) {
+            val payload = call.receive<AddIngredientToRecipeRequest>()
+            payload.validate()
 
-        val added = ingredientService.addIngredientsToRecipe(route.app.uid, request.ingredients.filterNotNull())
-        if (added) {
-            call.respond(HttpStatusCode.Accepted)
-        } else {
-            call.respond(HttpStatusCode.Conflict)
+            val added = ingredientService.addIngredientsToRecipe(
+                recipeId = route.app.uid,
+                ingredients = payload.ingredients.filterNotNull()
+            )
+            if (added) {
+                call.respond(HttpStatusCode.Accepted)
+            } else {
+                call.respond(HttpStatusCode.Conflict)
+            }
         }
     }
-
 
     locationsPost<Routes.Recipes.ByUid.Steps> {
 
@@ -119,17 +124,17 @@ fun Route.recipes() {
 
     // Add Ingredients to recipe
     locationsPost<Routes.Recipes.ByUid.Steps> { route ->
-        val request = withContext(Dispatchers.IO) {
-            call.receive<PostStepRequest>()
-        }
-        request.validate()
+        withContext(Dispatchers.IO) {
+            val payload = call.receive<PostStepRequest>()
+            payload.validate()
 
-        val created = stepService.createStep(route.app.uid, request.toEntity())
-        if (created != null) {
-            val response = PostStepResponse(step = created.renderer())
-            call.respond(HttpStatusCode.Created, response)
-        } else {
-            call.respond(HttpStatusCode.Conflict)
+            val created = stepService.createStep(route.app.uid, payload.toEntity())
+            if (created != null) {
+                val response = PostStepResponse(step = created.renderer())
+                call.respond(HttpStatusCode.Created, response)
+            } else {
+                call.respond(HttpStatusCode.Conflict)
+            }
         }
     }
 }

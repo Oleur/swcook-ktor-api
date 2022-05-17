@@ -43,16 +43,17 @@ fun Route.ingredients() {
     }
 
     locationsPost<Routes.Ingredients> {
-        val request = withContext(Dispatchers.IO) {
-            call.receive<PostIngredientRequest>()
-        }
-        request.validate()
-        val created = service.add(request.toEntity())
-        if (created != null) {
-            val response = PostIngredientResponse(ingredient = created.renderer())
-            call.respond(HttpStatusCode.Created, response)
-        } else {
-            call.respond(HttpStatusCode.Conflict)
+        withContext(Dispatchers.IO) {
+            val payload = call.receive<PostIngredientRequest>()
+            payload.validate()
+
+            val created = service.add(payload.toEntity())
+            if (created != null) {
+                val response = PostIngredientResponse(ingredient = created.renderer())
+                call.respond(HttpStatusCode.Created, response)
+            } else {
+                call.respond(HttpStatusCode.Conflict)
+            }
         }
     }
 }
