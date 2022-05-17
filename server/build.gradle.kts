@@ -18,6 +18,7 @@ plugins {
     application
     kotlin("jvm")
     kotlin("kapt")
+    kotlin("plugin.serialization")
     id("com.github.johnrengelman.shadow")
 }
 
@@ -42,10 +43,11 @@ sourceSets {
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     // Ktor
     implementation("io.ktor:ktor-server-netty:$ktor")
-    implementation("io.ktor:ktor-server-locations:$ktor")
+    implementation("io.ktor:ktor-server-resources:$ktor")
     implementation("io.ktor:ktor-server-status-pages:$ktor")
     implementation("io.ktor:ktor-server-data-conversion:$ktor")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor")

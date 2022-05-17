@@ -2,6 +2,7 @@ plugins {
     base
     kotlin("jvm") version "1.6.21"
     kotlin("kapt") version "1.6.21"
+    kotlin("plugin.serialization") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "5.0.0"
 }
 

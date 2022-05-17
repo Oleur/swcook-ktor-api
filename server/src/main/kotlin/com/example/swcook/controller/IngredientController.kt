@@ -12,17 +12,15 @@ import com.example.swcook.front.renderer.renderer
 import com.example.swcook.front.validation.validate
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.locations.KtorExperimentalLocationsAPI
-import io.ktor.server.locations.get
+import io.ktor.server.resources.get
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.ktor.ext.inject
-import io.ktor.server.locations.post as locationsPost
+import io.ktor.server.resources.post as resourcesPost
 
-@KtorExperimentalLocationsAPI
 fun Route.ingredients() {
 
     val service: IngredientService by inject()
@@ -42,7 +40,7 @@ fun Route.ingredients() {
         call.respond(HttpStatusCode.OK, response)
     }
 
-    locationsPost<Routes.Ingredients> {
+    resourcesPost<Routes.Ingredients> {
         withContext(Dispatchers.IO) {
             val payload = call.receive<PostIngredientRequest>()
             payload.validate()

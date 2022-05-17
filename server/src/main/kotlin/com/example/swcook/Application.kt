@@ -14,11 +14,10 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.application.install
-import io.ktor.server.locations.KtorExperimentalLocationsAPI
-import io.ktor.server.locations.Locations
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.dataconversion.DataConversion
 import io.ktor.server.plugins.statuspages.StatusPages
+import io.ktor.server.resources.Resources
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
@@ -29,7 +28,6 @@ import org.koin.logger.SLF4JLogger
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
-@KtorExperimentalLocationsAPI
 @Suppress("unused") // Referenced in application.conf
 @JvmOverloads
 fun Application.module(testing: Boolean = false) {
@@ -37,7 +35,7 @@ fun Application.module(testing: Boolean = false) {
         converters()
     }
 
-    install(Locations)
+    install(Resources)
 
     install(Koin) {
         SLF4JLogger()

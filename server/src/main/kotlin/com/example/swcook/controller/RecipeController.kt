@@ -18,19 +18,17 @@ import com.example.swcook.front.renderer.renderer
 import com.example.swcook.front.validation.validate
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.locations.KtorExperimentalLocationsAPI
-import io.ktor.server.locations.delete
-import io.ktor.server.locations.get
+import io.ktor.server.resources.delete
+import io.ktor.server.resources.get
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.ktor.ext.inject
-import io.ktor.server.locations.patch as locationsPatch
-import io.ktor.server.locations.post as locationsPost
+import io.ktor.server.resources.patch as resourcesPatch
+import io.ktor.server.resources.post as resourcesPost
 
-@KtorExperimentalLocationsAPI
 fun Route.recipes() {
 
     val recipeService: RecipeService by inject()
@@ -52,7 +50,7 @@ fun Route.recipes() {
         call.respond(HttpStatusCode.OK, response)
     }
 
-    locationsPost<Routes.Recipes> {
+    resourcesPost<Routes.Recipes> {
         withContext(Dispatchers.IO) {
             val payload = call.receive<PostRecipeRequest>()
             payload.validate()
@@ -76,7 +74,7 @@ fun Route.recipes() {
         }
     }
 
-    locationsPatch<Routes.Recipes.ByUid> { request ->
+    resourcesPatch<Routes.Recipes.ByUid> { request ->
         withContext(Dispatchers.IO) {
             val payload = call.receive<PatchRecipeRequestParameter>()
             payload.validate()
@@ -101,7 +99,7 @@ fun Route.recipes() {
     }
 
     // Add Ingredients to recipe
-    locationsPost<Routes.Recipes.ByUid.Ingredients> { route ->
+    resourcesPost<Routes.Recipes.ByUid.Ingredients> { route ->
         withContext(Dispatchers.IO) {
             val payload = call.receive<AddIngredientToRecipeRequest>()
             payload.validate()
@@ -118,12 +116,12 @@ fun Route.recipes() {
         }
     }
 
-    locationsPost<Routes.Recipes.ByUid.Steps> {
+    resourcesPost<Routes.Recipes.ByUid.Steps> {
 
     }
 
     // Add Ingredients to recipe
-    locationsPost<Routes.Recipes.ByUid.Steps> { route ->
+    resourcesPost<Routes.Recipes.ByUid.Steps> { route ->
         withContext(Dispatchers.IO) {
             val payload = call.receive<PostStepRequest>()
             payload.validate()
