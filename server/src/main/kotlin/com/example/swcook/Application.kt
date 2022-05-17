@@ -4,7 +4,6 @@ import com.example.swcook.controller.ingredients
 import com.example.swcook.controller.recipes
 import com.example.swcook.core.di.appModules
 import com.example.swcook.core.ktor.Environment.isDev
-import com.example.swcook.core.ktor.converters
 import com.example.swcook.core.ktor.exceptions
 import com.example.swcook.core.moshi.adapters
 import com.example.swcook.core.moshi.moshi
@@ -15,7 +14,6 @@ import io.ktor.server.application.Application
 import io.ktor.server.application.call
 import io.ktor.server.application.install
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.plugins.dataconversion.DataConversion
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.resources.Resources
 import io.ktor.server.response.respond
@@ -31,10 +29,6 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @JvmOverloads
 fun Application.module(testing: Boolean = false) {
-    install(DataConversion) {
-        converters()
-    }
-
     install(Resources)
 
     install(Koin) {

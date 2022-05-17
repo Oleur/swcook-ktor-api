@@ -49,7 +49,6 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktor")
     implementation("io.ktor:ktor-server-resources:$ktor")
     implementation("io.ktor:ktor-server-status-pages:$ktor")
-    implementation("io.ktor:ktor-server-data-conversion:$ktor")
     implementation("io.ktor:ktor-server-content-negotiation:$ktor")
 
     // Logback
