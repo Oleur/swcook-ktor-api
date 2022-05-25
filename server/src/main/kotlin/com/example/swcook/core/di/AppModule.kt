@@ -9,7 +9,8 @@ import com.example.swcook.domain.service.IngredientService
 import com.example.swcook.domain.service.RecipeService
 import com.example.swcook.domain.service.StepService
 import com.typesafe.config.ConfigFactory
-import io.ktor.config.*
+import io.ktor.server.config.ApplicationConfig
+import io.ktor.server.config.HoconApplicationConfig
 import org.koin.dsl.module
 
 val dataModule = module {

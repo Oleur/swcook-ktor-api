@@ -1,37 +1,58 @@
 package com.example.swcook
 
-import io.ktor.locations.*
+import com.example.swcook.core.serialization.UUIDSerializer
+import io.ktor.resources.Resource
+import kotlinx.serialization.Serializable
 import java.util.*
 
-@KtorExperimentalLocationsAPI
 object Routes {
 
-    @Location("/recipes")
+    @Serializable
+    @Resource("/recipes")
     class Recipes {
 
-        @Location("/{uid}")
-        data class ByUid(val recipes: Recipes, val uid: UUID) {
+        @Serializable
+        @Resource("/{uid}")
+        data class ByUid(
+            val recipes: Recipes,
+            @Serializable(with = UUIDSerializer::class) val uid: UUID
+        ) {
 
-            @Location("/ingredients")
+            @Serializable
+            @Resource("/ingredients")
             data class Ingredients(val app: Recipes.ByUid) {
 
-                @Location("/{ingredientUid}")
-                data class ByUid(val ingredients: Ingredients, val ingredientUid: UUID)
+                @Serializable
+                @Resource("/{ingredientUid}")
+                data class ByUid(
+                    val ingredients: Ingredients,
+                    @Serializable(with = UUIDSerializer::class) val ingredientUid: UUID
+                )
             }
 
-            @Location("/steps")
+            @Serializable
+            @Resource("/steps")
             data class Steps(val app: Recipes.ByUid) {
 
-                @Location("/{stepUid}")
-                data class ByUid(val ingredients: Steps, val stepUid: UUID)
+                @Serializable
+                @Resource("/{stepUid}")
+                data class ByUid(
+                    val ingredients: Steps,
+                    @Serializable(with = UUIDSerializer::class) val stepUid: UUID
+                )
             }
         }
     }
 
-    @Location("/ingredients")
+    @Serializable
+    @Resource("/ingredients")
     class Ingredients {
 
-        @Location("/{ingredientId}")
-        data class ByUid (val parent: Ingredients, val ingredientId: UUID)
+        @Serializable
+        @Resource("/{ingredientId}")
+        data class ByUid (
+            val parent: Ingredients,
+            @Serializable(with = UUIDSerializer::class) val ingredientId: UUID
+        )
     }
 }
