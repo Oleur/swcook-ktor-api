@@ -26,16 +26,18 @@ class MoshiConverter(private val moshi: Moshi = Moshi.Builder().build()) : Conte
         return moshi.adapter(typeInfo.type.javaObjectType).fromJson(source)
     }
 
-    override suspend fun serialize(
+    override suspend fun serializeNullable(
         contentType: ContentType,
         charset: Charset,
         typeInfo: TypeInfo,
-        value: Any
-    ): OutgoingContent {
-        return TextContent(
-            moshi.adapter(value.javaClass).toJson(value),
-            contentType.withCharset(charset)
-        )
+        value: Any?
+    ): OutgoingContent? {
+        return value?.let {
+            TextContent(
+                moshi.adapter(value.javaClass).toJson(value),
+                contentType.withCharset(charset)
+            )
+        }
     }
 }
 
